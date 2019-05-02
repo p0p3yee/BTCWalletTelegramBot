@@ -1,4 +1,4 @@
-package BTCWalletTelegramBot
+package Config
 
 import (
 	"encoding/json"

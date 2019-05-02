@@ -1,13 +1,14 @@
-package BTCWalletTelegramBot
+package main
 
 import (
 	"log"
 	"github.com/btcsuite/btcd/rpcclient"
+	"BTCWalletTelegramBot/Config"
 )
 
 func main(){
 
-	if err := LoadConfig(); err != nil {
+	if err := Config.LoadConfig(); err != nil {
 		log.Fatal(err)
 	}else{
 		log.Println("Config Loaded.")
@@ -15,9 +16,9 @@ func main(){
 
 
 	client, err := rpcclient.New(&rpcclient.ConnConfig{
-		Host: MyConfig.RPCHost,
-		User: MyConfig.RPCUser,
-		Pass: MyConfig.RPCPass,
+		Host: Config.MyConfig.RPCHost,
+		User: Config.MyConfig.RPCUser,
+		Pass: Config.MyConfig.RPCPass,
 		HTTPPostMode: true,
 		DisableTLS: true,
 	}, nil)

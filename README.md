@@ -20,6 +20,20 @@ Telegram Bot API
 
 ---
 
+## Configuration
+
+Create `config.json`
+
+```json
+{
+  "Host": "host:port",
+  "User": "rpcuser",
+  "Pass": "rpcuserpassword",
+  "token": "telegram bot token",
+  "ownerID": 0
+}
+```
+
 ## Build & Run
 
 1. `go install`

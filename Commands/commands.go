@@ -34,7 +34,9 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		}
 		return txt[: len(txt) - 2]
 	case "height":
-		return fmt.Sprintf("Block Height: <b>%d</b>", h.RPC.Client.GetBlockCount())
+		v, err := h.RPC.Client.GetBlockCount()
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		return fmt.Sprintf("Block Height: <b>%d</b>", v)
 	default:
 		return strings.Join(arguments, ", ")
 	}

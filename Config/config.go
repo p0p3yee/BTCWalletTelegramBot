@@ -7,9 +7,9 @@ import (
 )
 
 type Config struct {
-	RPCUser string
-	RPCHost string
-	RPCPass string
+	RPCUser string `json:"User"`
+	RPCHost string `json:"Host"`
+	RPCPass string `json:"Pass"`
 }
 
 var MyConfig Config

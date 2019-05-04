@@ -22,6 +22,8 @@ Telegram Bot API
 
 ## Build & Run
 
-1. `go build`
+1. `go install`
 
-2. `./BTCWalletTelegramBot`
+2. `go run main.go ` OR `go build main.go`
+
+3. `./BTCWalletTelegramBot`

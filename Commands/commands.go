@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var commands = [10]string{"start", "height", "help", "listacc"}
+var commands = [10]string{"start", "height", "help", "listacc", "getaddrbyac"}
 
 type Handler struct {
 	 RPC RPC.Rpc
@@ -44,6 +44,18 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		txt := "--<b>Accounts</b>--\n"
 		for v, k := range m {
 			txt += fmt.Sprintf("<code>%s</code>: <b>%.8f BTC</b>\n", v, k.ToBTC())
+		}
+		return txt
+	case "getaddrbyac":
+		param := ""
+		if len(arguments) > 0 {
+			param = arguments[0]
+		}
+		acc, err := h.RPC.Client.GetAddressesByAccount(param)
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		txt := fmt.Sprintf("Addresses of Account: <b>%s</b>\n", param)
+		for i, v := range acc {
+			txt += fmt.Sprintf("%d. <code>%s</code>\n", i, v)
 		}
 		return txt
 	default:

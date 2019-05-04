@@ -34,6 +34,10 @@ Create `config.json`
 }
 ```
 
+Pass `-deprecatedrpc=accounts` when you start BTC Daemon.
+
+or put `deprecatedrpc=accounts` in `bitcoin.conf`
+
 ## Build & Run
 
 1. `go install`

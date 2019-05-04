@@ -18,6 +18,7 @@ var commands = [10]string{
 	"getbalancebyacc",
 	"getreceivedbyacc",
 	"getnewaddr",
+	"gettrans",
 }
 
 type Handler struct {

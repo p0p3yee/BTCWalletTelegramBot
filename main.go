@@ -14,7 +14,6 @@ func main(){
 		log.Println("Config Loaded.")
 	}
 
-
 	client, err := rpcclient.New(&rpcclient.ConnConfig{
 		Host: Config.MyConfig.RPCHost,
 		User: Config.MyConfig.RPCUser,

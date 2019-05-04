@@ -2,6 +2,7 @@ package Config
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"os"
 )
 
@@ -15,11 +16,11 @@ var MyConfig Config
 
 func LoadConfig() error{
 	file, err := os.Open("config.json")
+	defer file.Close()
 	if err != nil { return err }
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&MyConfig)
-	if err != nil { return err }
-	err = file.Close()
-	if err != nil { return err }
+	byteVal, _ := ioutil.ReadAll(file)
+	if err := json.Unmarshal(byteVal, &MyConfig); err != nil {
+		return err
+	}
 	return nil
 }

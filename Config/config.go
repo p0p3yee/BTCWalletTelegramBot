@@ -10,6 +10,12 @@ type Config struct {
 	RPCUser string `json:"User"`
 	RPCHost string `json:"Host"`
 	RPCPass string `json:"Pass"`
+	BotToken string `json:"token"`
+	OwnerID int64 `json:"ownerID"`
+}
+
+func (c Config) IsOwner(id int64) bool {
+	return c.OwnerID == id
 }
 
 var MyConfig Config

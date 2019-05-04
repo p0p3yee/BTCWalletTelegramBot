@@ -3,11 +3,22 @@ package Commands
 import (
 	"BTCWalletTelegramBot/RPC"
 	"fmt"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"regexp"
 	"strings"
 )
 
-var commands = [10]string{"start", "height", "help", "listacc", "getaddrbyac", "getbalancebyacc", "getreceivedbyacc", "getnewaddr"}
+var commands = [10]string{
+	"ping",
+	"start",
+	"height",
+	"help",
+	"listacc",
+	"getaddrbyac",
+	"getbalancebyacc",
+	"getreceivedbyacc",
+	"getnewaddr",
+}
 
 type Handler struct {
 	 RPC RPC.Rpc
@@ -25,6 +36,11 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 	regex := regexp.MustCompile(" +")
 	arguments := regex.Split(args, -1)
 	switch cmd {
+	case "ping":
+		err := h.RPC.Client.Ping()
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		return "Pong!"
+
 	case "start" :
 		return fmt.Sprintf("Your User ID: <code>%d</code>", from)
 
@@ -62,6 +78,9 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 			txt = fmt.Sprintf("There is <b>NO</b> Addresses of Account: <b>%s</b>", param)
 		}else {
 			txt = fmt.Sprintf("Addresses of Account: <b>%s</b>\n", param)
+			if param == ""{
+				txt = fmt.Sprintf("All Addresses:\n", param)
+			}
 			for i, v := range acc {
 				txt += fmt.Sprintf("%d. <code>%s</code>\n", i, v)
 			}
@@ -95,8 +114,20 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		addr, err := h.RPC.Client.GetNewAddress(param)
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
 		return fmt.Sprintf("Address with account: <b>%s</b>, Generated: <code>%s</code>", param, addr.String())
+
+	case "gettrans":
+		param := ""
+		if len(arguments) == 0 {
+			return "<b>Error</b>: No TxHash Found.\nUsage: /gettrans <code>TxHash</code>"
+		}
+		hash, err := chainhash.NewHashFromStr(param)
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		trans, err := h.RPC.Client.GetTransaction(hash)
+		return fmt.Sprintf("TxID: <code>%s</code>\nBlock Hash: <code>%s</code>\nBlock Index: <code>%d</code>\nBlock Timestamp: <code>%d</code>\nAmount: <b>%.8f BTC</b>\n\nFee: <b>%.8f BTC</b>\nConfirmation: <b>%d</b>", trans.TxID, trans.BlockHash, trans.BlockIndex, trans.BlockTime, trans.Amount, trans.Fee, trans.Confirmations)
+
 	default:
 		return strings.Join(arguments, ", ")
+
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var commands = [10]string{"start", "height", "help"}
+var commands = [10]string{"start", "height", "help", "listacc"}
 
 type Handler struct {
 	 RPC RPC.Rpc
@@ -28,7 +28,7 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 	case "start" :
 		return fmt.Sprintf("Your User ID: <code>%d</code>", from)
 	case "help":
-		txt := "--Available Commands--\n"
+		txt := "--<b>Available Commands</b>--\n"
 		for _, v := range commands {
 			if len(v) <= 0 { continue }
 			txt += fmt.Sprintf("/%s, ", v)
@@ -38,6 +38,14 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		v, err := h.RPC.Client.GetBlockCount()
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
 		return fmt.Sprintf("Block Height: <b>%d</b>", v)
+	case "listacc":
+		m, err := h.RPC.Client.ListAccounts()
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		txt := "--<b>Accounts</b>--\n"
+		for v, k := range m {
+			txt += fmt.Sprintf("<code>%s</code>: <b>%.8f BTC</b>\n", v, k.ToBTC())
+		}
+		return txt
 	default:
 		return strings.Join(arguments, ", ")
 	}

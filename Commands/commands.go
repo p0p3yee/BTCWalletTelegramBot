@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var commands = [10]string{"start", "height", "help", "listacc", "getaddrbyac", "getbalancebyacc", "getreceivedbyacc"}
+var commands = [10]string{"start", "height", "help", "listacc", "getaddrbyac", "getbalancebyacc", "getreceivedbyacc", "getnewaddr"}
 
 type Handler struct {
 	 RPC RPC.Rpc
@@ -76,7 +76,7 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 
 		bal, err := h.RPC.Client.GetBalance(param)
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
-		return fmt.Sprintf("Balance of Account: <b>%s</b>: <b>%s BTC</b>", param, bal.String())
+		return fmt.Sprintf("Balance of Account: <b>%s</b>: <b>%s</b>", param, bal.String())
 
 	case "getreceivedbyacc":
 		param := ""
@@ -85,7 +85,7 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		}
 		bal, err := h.RPC.Client.GetReceivedByAccount(param)
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
-		return fmt.Sprintf("Account: <b>%s</b> Received: <b>%s BTC</b>", param, bal.String())
+		return fmt.Sprintf("Account: <b>%s</b> Received Total: <b>%s</b>", param, bal.String())
 
 	case "getnewaddr":
 		param := ""

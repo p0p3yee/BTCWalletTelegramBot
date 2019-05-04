@@ -118,12 +118,13 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 
 	case "gettrans":
 		param := ""
-		if len(arguments) == 0 {
+		if len(arguments) <= 0 {
 			return "<b>Error</b>: No TxHash Found.\nUsage: /gettrans <code>TxHash</code>"
 		}
 		hash, err := chainhash.NewHashFromStr(param)
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
 		trans, err := h.RPC.Client.GetTransaction(hash)
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
 		return fmt.Sprintf("TxID: <code>%s</code>\nBlock Hash: <code>%s</code>\nBlock Index: <code>%d</code>\nBlock Timestamp: <code>%d</code>\nAmount: <b>%.8f BTC</b>\n\nFee: <b>%.8f BTC</b>\nConfirmation: <b>%d</b>", trans.TxID, trans.BlockHash, trans.BlockIndex, trans.BlockTime, trans.Amount, trans.Fee, trans.Confirmations)
 
 	default:

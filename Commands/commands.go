@@ -26,10 +26,11 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 	arguments := regex.Split(args, -1)
 	switch cmd {
 	case "start" :
-		return fmt.Sprintf("Your User ID: <code>%s</code>", from)
+		return fmt.Sprintf("Your User ID: <code>%d</code>", from)
 	case "help":
 		txt := "--Available Commands--\n"
 		for _, v := range commands {
+			if len(v) <= 0 { continue }
 			txt += fmt.Sprintf("/%s, ", v)
 		}
 		return txt[: len(txt) - 2]

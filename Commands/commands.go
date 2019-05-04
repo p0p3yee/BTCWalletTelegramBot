@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var commands = [10]string{
+var commands = [11]string{
 	"ping",
 	"start",
 	"height",
@@ -19,6 +19,7 @@ var commands = [10]string{
 	"getreceivedbyacc",
 	"getnewaddr",
 	"gettrans",
+	"listtrans",
 }
 
 type Handler struct {
@@ -127,6 +128,18 @@ func (h *Handler) Handle(from int, cmd, args string) string{
 		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
 		return fmt.Sprintf("TxID: <code>%s</code>\nBlock Hash: <code>%s</code>\nBlock Index: <code>%d</code>\nBlock Timestamp: <code>%d</code>\nAmount: <b>%.8f BTC</b>\n\nFee: <b>%.8f BTC</b>\nConfirmation: <b>%d</b>", trans.TxID, trans.BlockHash, trans.BlockIndex, trans.BlockTime, trans.Amount, trans.Fee, trans.Confirmations)
 
+	case "listtrans":
+		param := ""
+		if len(arguments) == 1 {
+			param = arguments[0]
+		}
+		trans, err := h.RPC.Client.ListTransactions(param)
+		if err != nil { return fmt.Sprintf("<b>Error</b>: %s", err) }
+		txt := "--<b>Transactions</b>--\n"
+		for i, t := range trans {
+			txt += fmt.Sprintf("<b>%d</b>. <code>%s</code>", i, t.TxID)
+		}
+		return txt
 	default:
 		return strings.Join(arguments, ", ")
 
